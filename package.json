@@ -1,6 +1,6 @@
 {
 	"name": "jimcares",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "JavaScript In-Memory CAching, REStfully",
 	"main": "./src/Jim.js",
 	"module": "./src/Jim.js",
@@ -27,6 +27,7 @@
 		"url": "https://github.com/alexanderpharwood/jimcares/issues"
 	},
 	"files": [
+		"README.md",
 		"index.js",
 		"dist",
 		"src"
