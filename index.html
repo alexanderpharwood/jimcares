@@ -1,0 +1,36 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<script src="./dist/bundle.umd.js"></script>
+		<script>
+		Jim.init();
+
+		let data = {
+			"countries": {
+				"England": {
+					"cities":
+						["London", "Manchester"]
+				}
+			}
+		};
+
+		Jim.save('test', data);
+
+		console.log(Jim.trash('test'));
+		console.log(Jim.get('test'));
+		console.log(Jim.size());
+		console.log(Jim.toJson());
+		console.log(Jim.count());
+
+		setTimeout(function(){
+			Jim.save('cactus', 'They are sharp and pointy!');
+			console.log(Jim.count());
+		}, 5000);
+
+		if (Jim.has('test')) {
+			console.log('jim has test!');
+		}
+		</script>
+	</body>
+</html>

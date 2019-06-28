@@ -1,0 +1,42 @@
+{
+	"name": "jimcares",
+	"version": "1.0.0",
+	"description": "JavaScript In-Memory CAching, REStfully",
+	"main": "./src/Jim.js",
+	"module": "./src/Jim.js",
+	"browser": "./dist/jimcares.min.js",
+	"unpkg": "./dist/jimcares.min.js",
+	"scripts": {
+		"bundle": "node build/index.js",
+		"build": "node build/index.js",
+		"test": "echo 'Running mocha via npx serve @ http://localhost:5000/test' && npx serve"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/alexanderpharwood/jimcares.git"
+	},
+	"keywords": [
+		"JavaScript",
+		"cache",
+		"caching",
+		"memory"
+	],
+	"author": "Alexander P. Harwood <alex.harwood@live.co.uk>",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/alexanderpharwood/jimcares/issues"
+	},
+	"files": [
+		"index.js",
+		"dist",
+		"src"
+	],
+	"homepage": "https://github.com/alexanderpharwood/jimcares#readme",
+	"devDependencies": {
+		"@babel/core": "^7.4.5",
+		"@babel/preset-env": "^7.4.5",
+		"rollup": "^1.16.2",
+		"rollup-plugin-babel": "^4.3.3",
+		"rollup-plugin-uglify": "^6.0.2"
+	}
+}
