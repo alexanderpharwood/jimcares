@@ -16,11 +16,32 @@ describe('Jim.has', function () {
 		chai.expect(Jim.has(path)).to.equal(true);
 		Jim.destroy();
 	});
+	it('should return true when the path is present in cache inside a nested object', function () {
+		Jim.init()
+		let path = 'HAS_NESTED_TEST';
+		let value = {
+			"foo": {
+				"bar": "val" 
+			}
+		};
+		Jim.remember(path, value);
+		chai.expect(Jim.has('HAS_NESTED_TEST' + '/foo/bar')).to.equal(true);
+		Jim.destroy();
+	});
 	it('should return false when the path is not present in cache', function () {
 		Jim.init()
 		chai.expect(Jim.has('NO_SUCH_PATH')).to.equal(false);
 		Jim.destroy();
 	});
+	it('should return false when the path is present in cache inside a nested object', function () {
+		Jim.init()
+		let path = 'HAS_NOT_NESTED_TEST';
+		let value = "NOTHING NESTED HERE";
+		Jim.remember(path, value);
+		chai.expect(Jim.has('HAS_NOT_NESTED_TEST' + '/foo/bar')).to.equal(false);
+		Jim.destroy();
+	});
+	
 });
 
 describe('Jim.remember', function () {
