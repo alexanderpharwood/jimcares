@@ -1,11 +1,11 @@
-import Jim from '../src/Jim.js';
+import Jim from '../Jim.js';
 
-// describe('Jim.init', function () {
-// 	it('should return true if Jim initialises successfully', function () {
-// 		chai.expect(Jim.init()).to.equal(true);
-// 		Jim.destroy();
-// 	});
-// });
+describe('Jim.init', function () {
+	it('should return true if Jim initialises successfully', function () {
+		chai.expect(Jim.init()).to.equal(true);
+		Jim.destroy();
+	});
+});
 
 describe('Jim.has', function () {
 	it('should return true when the path is present in cache', function () {
