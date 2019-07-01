@@ -1,4 +1,4 @@
-function accessor(){
+function driver(){
 	if (typeof window.__jimcares === 'undefined') {
 		throw new Error('Jim is not initialised yet. Call Jim.init({options}) first');
 	}
@@ -6,4 +6,4 @@ function accessor(){
 	return window.__jimcares;
 }
 
-export default accessor;
+export default driver;

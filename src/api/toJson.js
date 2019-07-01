@@ -1,7 +1,7 @@
-import accessor from '../helpers/accessor.js';
+import driver from '../helpers/driver.js';
 
 function toJson(path) {
-	return JSON.stringify(accessor());
+	return JSON.stringify(driver());
 }
 
 export default toJson;

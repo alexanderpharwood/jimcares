@@ -1,10 +1,8 @@
-import accessor from '../helpers/accessor.js';
+import driver from '../helpers/driver.js';
 
 function count(path) {
-	let exclusions = ["created_at", "updated_at"]
-	let count = 0;
-	let memory = accessor();
-	return Object.keys(memory).length - exclusions.length;
+	let memory = driver();
+	return Object.keys(memory.roots).length;
 }
 
 export default count;

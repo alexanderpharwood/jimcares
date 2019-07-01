@@ -1,7 +1,7 @@
-import accessor from '../helpers/accessor.js';
+import driver from '../helpers/driver.js';
 
 function setUpdatedAt() {
-	accessor().updated_at = new Date();
+	driver().updated_at = new Date();
 }
 
 export default setUpdatedAt;

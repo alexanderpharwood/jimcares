@@ -1,8 +1,8 @@
-import accessor from '../helpers/accessor.js';
+import driver from '../helpers/driver.js';
 import sizeof from '../helpers/sizeof.js';
 
 function size(path) {
-	return sizeof(accessor());
+	return sizeof(driver().roots);
 }
 
 export default size;

@@ -36,8 +36,8 @@ class Jim {
 	 * @param mixed value
 	 * @return bool
 	 */
-	static remember(path, value) {
-		return remember(path, value);
+	static remember(path, value, expires_at) {
+		return remember(path, value, expires_at);
 	}
 
 	/**

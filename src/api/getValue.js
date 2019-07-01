@@ -1,19 +1,19 @@
-import accessor from '../helpers/accessor.js';
+import driver from '../helpers/driver.js';
 import getPathProps from '../helpers/getPathProps.js';
 
 function getValue(path) {
-	let memory = accessor();
+	let memory = driver();
 	let pathProps = getPathProps(path);
 
 	if (pathProps.length === 0) {
-		return memory[path].value;
+		return memory.roots[path].value;
 	}
 
-	if (typeof memory[pathProps[0]] === 'undefined') {
+	if (typeof memory.roots[pathProps[0]] === 'undefined') {
 		return undefined;
 	}
 
-	var node = memory[pathProps[0]].value;
+	var node = memory.roots[pathProps[0]].value;
 	pathProps.shift();
 	for (let index in pathProps) {
 		node = node[pathProps[index]];
