@@ -1,15 +1,15 @@
 {
 	"name": "jimcares",
 	"version": "1.0.2",
-	"description": "JavaScript In-Memory CAching, REStfully",
+	"description": "JavaScript In-Memory CAching, REsource Singleton",
 	"main": "./src/Jim.js",
 	"module": "./src/Jim.js",
 	"browser": "./dist/jimcares.min.js",
 	"unpkg": "./dist/jimcares.min.js",
 	"scripts": {
-		"bundle": "node build/index.js",
-		"build": "node build/index.js",
-		"test": "echo 'Running mocha via npx serve @ http://localhost:5000/test' && npx serve"
+		"test": "karma start --single-run --browsers ChromeHeadless my.conf.js",
+		"test-browser": "echo 'Running mocha via npx serve @ http://localhost:5000/test' && npx serve",
+		"build": "node build/index.js"
 	},
 	"repository": {
 		"type": "git",
@@ -36,6 +36,14 @@
 	"devDependencies": {
 		"@babel/core": "^7.4.5",
 		"@babel/preset-env": "^7.4.5",
+		"chai": "^4.2.0",
+		"karma": "^4.1.0",
+		"karma-chai": "^0.1.0",
+		"karma-chrome-launcher": "^2.2.0",
+		"karma-firefox-launcher": "^1.1.0",
+		"karma-mocha": "^1.3.0",
+		"karma-rollup-preprocessor": "^7.0.0",
+		"mocha": "^6.1.4",
 		"rollup": "^1.16.2",
 		"rollup-plugin-babel": "^4.3.3",
 		"rollup-plugin-uglify": "^6.0.2"
