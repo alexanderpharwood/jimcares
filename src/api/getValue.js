@@ -19,7 +19,12 @@ function getValue(path) {
 
 	var node = memory.roots[pathProps[0]].value;
 	pathProps.shift();
+	
 	for (let index in pathProps) {
+		if (typeof node[pathProps[index]] === 'undefined') {
+			return undefined;
+		}
+		
 		node = node[pathProps[index]];
 	}
 
