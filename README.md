@@ -1,5 +1,9 @@
 # Jimcares
+
 **J**avaScript **I**n-**M**emory **CA**ching **RE**source **S**ingleton
+
+![npm](https://img.shields.io/npm/v/jimcares.svg)
+[![Build Status](https://travis-ci.org/alexanderpharwood/jimcares.svg?branch=master)](https://travis-ci.org/alexanderpharwood/jimcares)  
 
 Jimcares is a singleton for JavaScript in-memory caching. It is used to store complex data in memory, or large (ish) api results which only need fetching once. It allows for querying the properties within large data structures, as well as more simple read/write functionality.
 
