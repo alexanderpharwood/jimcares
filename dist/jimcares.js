@@ -40,7 +40,7 @@
     return Constructor;
   }
 
-  function accessor() {
+  function driver() {
     if (typeof window.__jimcares === 'undefined') {
       throw new Error('Jim is not initialised yet. Call Jim.init({options}) first');
     }
@@ -53,18 +53,18 @@
   }
 
   function getValue(path) {
-    var memory = accessor();
+    var memory = driver();
     var pathProps = getPathProps(path);
 
     if (pathProps.length === 0) {
-      return memory[path].value;
+      return memory.roots[path].value;
     }
 
-    if (typeof memory[pathProps[0]] === 'undefined') {
+    if (typeof memory.roots[pathProps[0]] === 'undefined') {
       return undefined;
     }
 
-    var node = memory[pathProps[0]].value;
+    var node = memory.roots[pathProps[0]].value;
     pathProps.shift();
 
     for (var index in pathProps) {
@@ -152,51 +152,47 @@
   }
 
   function size(path) {
-    return sizeof(accessor());
+    return sizeof(driver().roots);
   }
 
   function getRoot(path) {
-    var memory = accessor();
+    var memory = driver();
     var pathProps = getPathProps(path);
 
     if (pathProps.length === 0) {
-      return memory[path].value;
+      return memory.roots[path].value;
     }
 
-    return memory[pathProps[0]];
+    return memory.roots[pathProps[0]];
   }
 
   function setUpdatedAt() {
-    accessor().updated_at = new Date();
+    driver().updated_at = new Date();
   }
 
   function trash(path) {
-    var node = getRoot(path);
+    var root = getRoot(path);
 
-    if (typeof node === 'undefined') {
+    if (typeof root === 'undefined') {
       return false;
     }
 
-    node.deleted_at = new Date();
+    root.deleted_at = new Date();
     setUpdatedAt();
     return true;
   }
 
   function clear(path) {
-    var memory = accessor();
-    var exclusions = ["created_at", "updated_at"];
+    var memory = driver();
 
-    for (var i in memory) {
-      if (exclusions.indexOf(i) === -1) {
-        delete memory[i];
-      }
+    for (var i in memory.roots) {
+      delete memory.roots[i];
     }
   }
 
   function count(path) {
-    var exclusions = ["created_at", "updated_at"];
-    var memory = accessor();
-    return Object.keys(memory).length - exclusions.length;
+    var memory = driver();
+    return Object.keys(memory.roots).length;
   }
 
   function equals(path, match) {
@@ -204,31 +200,106 @@
   }
 
   function toJson(path) {
-    return JSON.stringify(accessor());
+    return JSON.stringify(driver());
   }
 
   function forget(path) {
-    var memory = accessor();
+    var memory = driver();
     var pathProps = getPathProps(path);
     setUpdatedAt();
-    return delete memory[path];
+    return delete memory.roots[path];
   }
 
   function destroy(path) {
+    clearInterval(window.__jimcares.expirationWorker);
     return delete window.__jimcares;
   }
 
-  function remember(path, value) {
-    if (typeof path === 'undefined') {
-      throw new Error('path cannot be undefined');
+  /**
+   * Adds time to a date. Modelled after MySQL DATE_ADD function.
+   * Example: dateAdd(new Date(), 'minute', 30)  //returns 30 minutes from now.
+   * https://stackoverflow.com/a/1214753/18511
+   *
+   * @param date  Date to start with
+   * @param interval  One of: year, month, week, day, hour, minute, second
+   * @param units  Number of units of the given interval to add.
+   */
+  function dateAdd(date, interval, units) {
+    var ret = new Date(date); //don't change original date
+
+    var checkRollover = function checkRollover() {
+      if (ret.getDate() !== date.getDate()) {
+        ret.setDate(0);
+      }
+    };
+
+    switch (interval.toLowerCase()) {
+      case 'year':
+      case 'years':
+        ret.setFullYear(ret.getFullYear() + units);
+        checkRollover();
+        break;
+
+      case 'month':
+      case 'months':
+        ret.setMonth(ret.getMonth() + units);
+        checkRollover();
+        break;
+
+      case 'week':
+      case 'weeks':
+        ret.setDate(ret.getDate() + 7 * units);
+        break;
+
+      case 'day':
+      case 'days':
+        ret.setDate(ret.getDate() + units);
+        break;
+
+      case 'hour':
+      case 'hours':
+        ret.setTime(ret.getTime() + units * 3600000);
+        break;
+
+      case 'minute':
+      case 'minutes':
+        ret.setTime(ret.getTime() + units * 60000);
+        break;
+
+      case 'second':
+      case 'seconds':
+        ret.setTime(ret.getTime() + units * 1000);
+        break;
+
+      default:
+        ret = undefined;
+        break;
     }
 
-    var memory = accessor();
-    var item = memory[path] = {};
+    return ret;
+  }
+
+  function dateFromDifferenceString(difference) {
+    var date = new Date();
+    var interval = difference.split(' ')[1];
+    var units = difference.split(' ')[0];
+    date = dateAdd(date, interval, units);
+    return date;
+  }
+
+  function remember(path, value, expires_at) {
+    if (typeof path === 'undefined') {
+      return false;
+    }
+
+    var memory = driver();
+    var item = memory.roots[path] = {};
+    expires_at = typeof expires_at === 'undefined' ? window.__jimcares.defaultExpiration : expires_at;
     item.value = value;
     item.created_at = new Date();
     item.updated_at = new Date();
     item.deleted_at = null;
+    item.expires_at = dateFromDifferenceString(expires_at);
     setUpdatedAt();
     return true;
   }
@@ -244,14 +315,39 @@
 
   /**
    * Initialise Jimcares
-   * @todo This method should accept options, such as a default expiration time. It should also set up the timeout for removing properties from the cache.
+   *
+   * @param object settings
    * @return bool
    */
-  function init() {
+
+  function init(settings) {
+    //Default settings
+    var defaultExpiration = '24 hours';
+
+    if (typeof settings !== 'undefined') {
+      if (typeof settings.defaultExpiration !== 'undefined') {
+        var _defaultExpiration = settings.defaultExpiration;
+      }
+    }
+
     window.__jimcares = {
-      "created_at": new Date(),
-      "updated_at": new Date()
+      created_at: new Date(),
+      updated_at: new Date(),
+      roots: {},
+      defaultExpiration: defaultExpiration
     };
+
+    var expirationWorker = function expirationWorker() {
+      return setInterval(function () {
+        for (var i in window.__jimcares.roots) {
+          if (getRoot(i).expires_at.getTime() < new Date().getTime()) {
+            forget(i);
+          }
+        }
+      }, 5000);
+    };
+
+    window.__jimcares.expirationWorker = expirationWorker();
     return true;
   }
 
@@ -289,8 +385,8 @@
 
     }, {
       key: "remember",
-      value: function remember$1(path, value) {
-        return remember(path, value);
+      value: function remember$1(path, value, expires_at) {
+        return remember(path, value, expires_at);
       }
       /**
        * Get the value from the given path.
