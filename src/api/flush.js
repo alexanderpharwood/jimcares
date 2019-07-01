@@ -2,7 +2,7 @@ import driver from '../helpers/driver.js';
 import getPathProps from '../helpers/getPathProps.js';
 import setUpdatedAt from '../helpers/setUpdatedAt.js';
 
-function clear(path) {
+function flush(path) {
 	let memory = driver();
 	let exclusions = ["created_at", "updated_at"]
 	for (let i in memory.roots) {
@@ -10,4 +10,4 @@ function clear(path) {
 	}
 }
 
-export default clear;
+export default flush;
