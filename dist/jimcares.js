@@ -48,11 +48,24 @@
     return window.__jimcares;
   }
 
+  function getRoot(path) {
+    if (typeof path !== 'string') {
+      throw new TypeError("differance must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
+    var memory = driver();
+    return memory.roots[path];
+  }
+
   function getPathProps(path) {
-    return path.split('/');
+    return path.split(window.__jimcares.queryNotation);
   }
 
   function getValue(path) {
+    if (typeof path !== 'string') {
+      throw new TypeError("differance must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
     var memory = driver();
     var pathProps = getPathProps(path);
 
@@ -68,6 +81,10 @@
     pathProps.shift();
 
     for (var index in pathProps) {
+      if (typeof node[pathProps[index]] === 'undefined') {
+        return undefined;
+      }
+
       node = node[pathProps[index]];
     }
 
@@ -75,7 +92,13 @@
   }
 
   function has(path) {
-    return typeof getValue(path) !== 'undefined';
+    if (typeof path !== 'string') {
+      throw new TypeError("path must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
+    var rootExists = typeof getRoot(path) !== 'undefined';
+    var valueExists = typeof getValue(path) !== 'undefined';
+    return rootExists || valueExists;
   }
 
   /*
@@ -155,22 +178,15 @@
     return sizeof(driver().roots);
   }
 
-  function getRoot(path) {
-    var memory = driver();
-    var pathProps = getPathProps(path);
-
-    if (pathProps.length === 0) {
-      return memory.roots[path].value;
-    }
-
-    return memory.roots[pathProps[0]];
-  }
-
   function setUpdatedAt() {
     driver().updated_at = new Date();
   }
 
   function trash(path) {
+    if (typeof path !== 'string') {
+      throw new TypeError("path must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
     var root = getRoot(path);
 
     if (typeof root === 'undefined') {
@@ -182,7 +198,7 @@
     return true;
   }
 
-  function clear(path) {
+  function flush(path) {
     var memory = driver();
 
     for (var i in memory.roots) {
@@ -196,6 +212,10 @@
   }
 
   function equals(path, match) {
+    if (typeof path !== 'string') {
+      throw new TypeError("path must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
     return getValue(path) === match;
   }
 
@@ -204,6 +224,10 @@
   }
 
   function forget(path) {
+    if (typeof path !== 'string') {
+      throw new TypeError("path must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
     var memory = driver();
     var pathProps = getPathProps(path);
     setUpdatedAt();
@@ -280,6 +304,10 @@
   }
 
   function dateFromDifferenceString(difference) {
+    if (typeof difference !== 'string') {
+      throw new TypeError("differance must be of type 'string': '" + _typeof(difference) + "' given.");
+    }
+
     var date = new Date();
     var interval = difference.split(' ')[1];
     var units = difference.split(' ')[0];
@@ -288,8 +316,8 @@
   }
 
   function remember(path, value, expires_at) {
-    if (typeof path === 'undefined') {
-      return false;
+    if (typeof path !== 'string') {
+      throw new TypeError("path must be of type 'string'");
     }
 
     var memory = driver();
@@ -302,6 +330,20 @@
     item.expires_at = dateFromDifferenceString(expires_at);
     setUpdatedAt();
     return true;
+  }
+
+  function isTrashed(path) {
+    if (typeof path !== 'string') {
+      throw new TypeError("path must be of type 'string': '" + _typeof(path) + "' given.");
+    }
+
+    var root = getRoot(path);
+
+    if (typeof root === 'undefined') {
+      return false;
+    }
+
+    return root.deleted_at !== null;
   }
 
   function writeToLS(path) {
@@ -322,10 +364,15 @@
   function init(settings) {
     //Default settings
     var defaultExpiration = '24 hours';
+    var queryNotation = '/';
 
     if (typeof settings !== 'undefined') {
       if (typeof settings.defaultExpiration !== 'undefined') {
         var _defaultExpiration = settings.defaultExpiration;
+      }
+
+      if (typeof settings.queryNotation !== 'undefined') {
+        var _queryNotation = settings.queryNotation;
       }
     }
 
@@ -333,7 +380,8 @@
       created_at: new Date(),
       updated_at: new Date(),
       roots: {},
-      defaultExpiration: defaultExpiration
+      defaultExpiration: defaultExpiration,
+      queryNotation: queryNotation
     };
 
     var expirationWorker = function expirationWorker() {
@@ -444,8 +492,8 @@
 
     }, {
       key: "isTrashed",
-      value: function isTrashed(path) {
-        return trash(path);
+      value: function isTrashed$1(path) {
+        return isTrashed(path);
       }
       /**
        * Hard delete the root at the given path.
@@ -460,15 +508,15 @@
         return forget(path);
       }
       /**
-       * Clear all roots from the cache.
+       * Flush all roots from the cache.
        *
        * @return void
        */
 
     }, {
-      key: "clear",
-      value: function clear$1() {
-        clear();
+      key: "flush",
+      value: function flush$1() {
+        flush();
       }
       /**
        * Destroy the entire cache.
