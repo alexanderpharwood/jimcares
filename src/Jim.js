@@ -1,7 +1,7 @@
 import has from './api/has.js';
 import size from './api/size.js';
 import trash from './api/trash.js';
-import clear from './api/clear.js';
+import flush from './api/flush.js';
 import count from './api/count.js';
 import equals from './api/equals.js';
 import toJson from './api/toJson.js';
@@ -10,6 +10,7 @@ import getRoot from './api/getRoot.js';
 import destroy from './api/destroy.js';
 import getValue from './api/getValue.js';
 import remember from './api/remember.js';
+import isTrashed from './api/isTrashed.js';
 import writeToLS from './api/writeToLS.js';
 import initialise from './api/initialise.js';
 
@@ -87,7 +88,7 @@ class Jim {
 	 * @return bool
 	 */
 	static isTrashed(path) {
-		return trash(path);
+		return isTrashed(path);
 	}
 
 	/**
@@ -101,12 +102,12 @@ class Jim {
 	}
 
 	/**
-	 * Clear all roots from the cache.
+	 * Flush all roots from the cache.
 	 *
 	 * @return void
 	 */
-	static clear() {
-		clear()
+	static flush() {
+		flush()
 	}
 
 	/**
