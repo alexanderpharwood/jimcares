@@ -306,8 +306,7 @@
 
   function writeToLS(path) {
     if (typeof Storage === "undefined") {
-      console.error('Client does not support local storage');
-      return false;
+      throw new Error('Client does not support local storage');
     }
 
     return localStorage.setItem("__jimcares", toJson());
