@@ -17,8 +17,8 @@ Initialise Jim. The default expiration will be 24 hours if this property is not 
 **Throws** TypeError  
 ```
 let options = {
-	defaultExpirations: "4 hours",
-	queryNotation: "." //
+	defaultExpiration: "4 hours",
+	queryNotation: "."
 }
 Jim.init(options);
 ```
