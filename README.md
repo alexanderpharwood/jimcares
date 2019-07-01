@@ -37,7 +37,7 @@ Jim.forget({string} path)
 Get the entire cache as a Json string.
 Jim.toJson()
 
-Get an approximate size of the entire cache in bytes.
+Get an approximate size of the entire cache in bytes.  
 Jim.size()
 
 Count the number of roots in the cache.
