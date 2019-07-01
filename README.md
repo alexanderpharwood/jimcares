@@ -5,4 +5,32 @@ Jimcares is a singleton for JavaScript in-memory caching. It is used to store co
 
 
 ## API
-Coming soon
+
+Initialise Jim.
+Jim.init({object} options)
+
+Jim.has({string} path)
+
+Jim.remember({mixed} value, {string} path, {string} expires_at)
+
+Jim.get({string} path)
+
+Jim.root({string} path)
+
+Jim.writeToLS()
+
+Jim.trash({string} path)
+
+Jim.forget({string} path)
+
+Jim.toJson()
+
+Jim.size()
+
+Jim.count()
+
+Jim.equals({string} path, {mixed} value)
+
+Jim.clear()
+
+Jim.destroy()
