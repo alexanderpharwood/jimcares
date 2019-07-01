@@ -11,7 +11,7 @@ Jim.init({object} options)
 
 Jim.has({string} path)
 
-Jim.remember({mixed} value, {string} path, {string} expires_at)
+Jim.remember({string} path, {mixed} value, {string} expires_at)
 
 Jim.get({string} path)
 
