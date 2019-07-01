@@ -14,10 +14,14 @@ function init(settings) {
 
 	//Default settings
 	let defaultExpiration = '24 hours';
+	let queryNotation = '/';
 
 	if (typeof settings !== 'undefined') {
 		if (typeof settings.defaultExpiration !== 'undefined') {
 			let defaultExpiration = settings.defaultExpiration;
+		}
+		if (typeof settings.queryNotation !== 'undefined') {
+			let queryNotation = settings.queryNotation;
 		}
 	}
 	
@@ -30,6 +34,7 @@ function init(settings) {
 		updated_at: new Date(),
 		roots: {},
 		defaultExpiration: defaultExpiration,
+		queryNotation: queryNotation,
 	};
 
 	let expirationWorker = function(){
