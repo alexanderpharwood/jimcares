@@ -20,6 +20,10 @@ function init(settings) {
 			let defaultExpiration = settings.defaultExpiration;
 		}
 	}
+	
+	if (typeof defaultExpiration !== 'string') {
+		throw new TypeError("options.defaultExpiration must be of type 'string': '" + typeof defaultExpiration + "' given.");
+	}
 
 	window.__jimcares = {
 		created_at: new Date(),

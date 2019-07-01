@@ -2,6 +2,10 @@ import driver from '../helpers/driver.js';
 import getPathProps from '../helpers/getPathProps.js';
 
 function getValue(path) {
+	if (typeof path !== 'string') {
+		throw new TypeError("differance must be of type 'string': '" + typeof path + "' given.");
+ 	}
+	
 	let memory = driver();
 	let pathProps = getPathProps(path);
 

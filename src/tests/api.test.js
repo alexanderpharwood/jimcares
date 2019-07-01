@@ -40,6 +40,18 @@ describe('Jim.get', function () {
 		chai.expect(Jim.get(path)).to.equal(value);
 		Jim.destroy();
 	});
+	it('should return the value of the nested property of an object at the path in cache', function () {
+		Jim.init()
+		let path = 'GET_TEST';
+		let value = {
+			"foo": {
+				"bar": "val" 
+			}
+		};
+		Jim.remember(path, value);
+		chai.expect(Jim.get(path + '/foo/bar')).to.equal("val");
+		Jim.destroy();
+	});
 });
 
 describe('Jim.root', function () {
@@ -87,6 +99,19 @@ describe('Jim.trash', function () {
 		Jim.trash(path);
 
 		chai.expect(typeof Jim.root(path).deleted_at).to.equal('object');
+		Jim.destroy();
+	});
+});
+
+describe('Jim.isTrashed', function () {
+	it('should return true if the root has been trashed', function () {
+		Jim.init()
+		const path = 'ISTRASHED_TEST';
+		const value = 'This is the value of the isTrashed test.';
+		Jim.remember(path, value);
+		Jim.trash(path);
+
+		chai.expect(Jim.isTrashed(path)).to.equal(true);
 		Jim.destroy();
 	});
 });
@@ -145,7 +170,7 @@ describe('Jim.count', function () {
 		const value = 'This is the value of the size test.';
 
 		//Remove all current roots
-		Jim.clear();
+		Jim.flush();
 
 		Jim.remember(path, value);
 
@@ -166,13 +191,13 @@ describe('Jim.equals', function () {
 	});
 });
 
-describe('Jim.clear', function () {
-	it('should clear all roots from the cache', function () {
+describe('Jim.flush', function () {
+	it('should flush all roots from the cache', function () {
 		Jim.init()
-		const path = 'CLEAR_TEST';
-		const value = 'This is the value of the clear test.';
+		const path = 'FLUSH_TEST';
+		const value = 'This is the value of the flush test.';
 		Jim.remember(path, value);
-		Jim.clear();
+		Jim.flush();
 
 		chai.expect(Jim.count()).to.equal(0);
 		Jim.destroy();

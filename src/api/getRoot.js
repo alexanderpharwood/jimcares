@@ -1,15 +1,12 @@
 import driver from '../helpers/driver.js';
-import getPathProps from '../helpers/getPathProps.js';
 
 function getRoot(path) {
+	if (typeof path !== 'string') {
+		throw new TypeError("differance must be of type 'string': '" + typeof path + "' given.");
+ 	}
+	
 	let memory = driver();
-	let pathProps = getPathProps(path);
-
-	if (pathProps.length === 0) {
-		return memory.roots[path].value;
-	}
-
-	return memory.roots[pathProps[0]];
+	return memory.roots[path];
 }
 
 export default getRoot;
