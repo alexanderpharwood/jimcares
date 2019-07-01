@@ -1,5 +1,5 @@
 function getPathProps(path) {
-	return path.split('/');
+	return path.split(window.__jimcares.queryNotation);
 }
 
 export default getPathProps;
