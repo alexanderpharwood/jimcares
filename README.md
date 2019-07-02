@@ -11,6 +11,31 @@
 
 Jimcares is a singleton for JavaScript in-memory caching. It is used to store complex data in memory, or large api responses which only need fetching once. It allows for querying the properties within large data structures, as well as more simple read/write functionality.
 
+Note: Currently, the only driver shipped with Jimcares uses the window object. It is therefore at this stage a browser plugin only, and will not currently work with Node. 
+## Usage
+
+#### Unpkg
+```
+<script src="https://unpkg.com/jimcares/dist/jimcares.min.js"></script>
+```
+
+#### Npm
+```
+npm install jimcares
+```
+
+#### Yarn
+```
+yarn add jimcares
+```
+You can require the Jim singleton like so:
+```
+const Jim = require('jimcares');
+```
+Alternatively, you can import the module directly if you are using an ES6-aware build tool like Webpack or Rollup, which makes use of the 'module' field in package.json.
+```
+import Jim from 'jimcares';
+```
 
 ## API
 
@@ -28,7 +53,7 @@ Jim.init(options);
 ```
 
 #### Jim.remember()
-Tell Jim to remember a value. You can override the default expiration for a given root.
+Tell Jim to remember a value. You can override the default expiration for a given root.  
 **Parameter** {string} path  
 **Parameter** {mixed} value  
 **Parameter** {string} expiration  
@@ -141,8 +166,8 @@ Count the number of roots in the cache.
 Jim.count()
 
 <a name="querying_objects"></a>
-## Querying objects with Jim.get()  
-You can use certain notations to get nested properties of objects. For example:
+## Querying objects
+Jim.get() and Jim.has() both support the querying of objects. You can use certain notations to get nested properties or check they exist. For example:
 
 ```
 let data = {
@@ -153,6 +178,7 @@ let data = {
 
 Jim.remember('example', data);
 Jim.get('example/foo/bar') === "val"
+Jim.has('example/foo/bar') === true
 ```
 
 Note: slash notation is the default. You can specify an alternative via the init method.
