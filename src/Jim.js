@@ -16,8 +16,8 @@ import initialise from './api/initialise.js';
 
 class Jim {
 
-	static init() {
-		return initialise();
+	static init(options) {
+		return initialise(options);
 	}
 
 	/**
