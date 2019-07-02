@@ -1,6 +1,6 @@
 {
 	"name": "jimcares",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "JavaScript In-Memory CAching, REsource Singleton",
 	"main": "./dist/jimcares.js",
 	"module": "./src/Jim.js",
