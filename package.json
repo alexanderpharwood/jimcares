@@ -2,7 +2,7 @@
 	"name": "jimcares",
 	"version": "1.0.5",
 	"description": "JavaScript In-Memory CAching, REsource Singleton",
-	"main": "./src/Jim.js",
+	"main": "./dist/jimcares.js",
 	"module": "./src/Jim.js",
 	"browser": "./dist/jimcares.min.js",
 	"unpkg": "./dist/jimcares.min.js",
@@ -47,5 +47,6 @@
 		"rollup": "^1.16.2",
 		"rollup-plugin-babel": "^4.3.3",
 		"rollup-plugin-uglify": "^6.0.2"
-	}
+	},
+	"dependencies": {}
 }
