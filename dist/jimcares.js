@@ -407,8 +407,8 @@
 
     _createClass(Jim, null, [{
       key: "init",
-      value: function init$1() {
-        return init();
+      value: function init$1(options) {
+        return init(options);
       }
       /**
        * Determine whether jim has the given path.
