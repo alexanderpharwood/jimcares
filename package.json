@@ -1,7 +1,7 @@
 {
 	"name": "jimcares",
 	"version": "1.0.6",
-	"description": "JavaScript In-Memory CAching, REsource Singleton",
+	"description": "JavaScript In-Memory CAching REsource Singleton",
 	"main": "./dist/jimcares.js",
 	"module": "./src/Jim.js",
 	"browser": "./dist/jimcares.min.js",
@@ -9,7 +9,8 @@
 	"scripts": {
 		"test": "karma start --single-run --browsers ChromeHeadless my.conf.js",
 		"test-browser": "echo 'Running mocha via npx serve @ http://localhost:5000/test' && npx serve",
-		"build": "node build/index.js"
+		"build": "node build/index.js",
+		"lint": "eslint ./src/Jim.js ./src/api ./src/helpers"
 	},
 	"repository": {
 		"type": "git",
@@ -37,6 +38,7 @@
 		"@babel/core": "^7.4.5",
 		"@babel/preset-env": "^7.4.5",
 		"chai": "^4.2.0",
+		"eslint": "^6.0.1",
 		"karma": "^4.1.0",
 		"karma-chai": "^0.1.0",
 		"karma-chrome-launcher": "^2.2.0",
