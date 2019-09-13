@@ -53,11 +53,11 @@ Jim.init(options);
 ```
 
 #### Jim.remember()
-Tell Jim to remember a value. You can override the default expiration for a given root.  
+Tell Jim to remember a value. You can override the default expiration for a given root. Note: if value is a function, It will be executed and the return value will be remembered.
 **Parameter** {string} path  
 **Parameter** {mixed} value  
 **Parameter** {string} expiration  
-**Returns** boolean  
+**Returns** {mixed} the remembered value  
 **Throws** TypeError  
 ```
 Jim.remember('example', {example: true}, '10 minutes');
@@ -73,8 +73,8 @@ Jim.has('example') === true;
 ```
 
 #### Jim.get()  
-Get the value at the given path.  
-**Parameter** {string} path  
+Get the value at the given path. If a path is not provided the entire cache object will be returned.
+**Parameter** {string} path|undefined
 **Returns** mixed  
 **Throws** TypeError  
 ```
