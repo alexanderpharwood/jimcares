@@ -1,6 +1,6 @@
 import driver from '../helpers/driver.js';
 
-function count(path) {
+function count() {
 	let memory = driver();
 	return Object.keys(memory.roots).length;
 }
